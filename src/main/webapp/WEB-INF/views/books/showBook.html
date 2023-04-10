@@ -4,14 +4,30 @@
     <meta charset="UTF-8">
     <title>Show</title>
 </head>
-<body>
-<p th:text="${book.getName() + ', ' + book.getAuthor()+ ', ' + book.getYear()}">VALUE</p>
+
+<p th:text="${book.getName() + ', ' + book.getAuthor() + ', ' + book.getYear()}">VALUE</p>
 <p>Select person to current book:</p>
-<p></p>
-<select th:object="${person}" th:field="*{id}" id="person">
-    <option th:each="person: ${people}" th:value="${person.getId()}" th:text="${person.getFullName()}">
-    </option>
-</select><input type="submit" value="Set person to the book"/>
+
+<div th:if="${owner}">
+    <span>Book now at: </span> <span th:text="${owner.getFullName()}">Person Name</span>
+
+    <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.getId()})}">
+        <input type="submit" value="Give away book"/>
+    </form>
+</div>
+
+<div th:if="${people}">
+    <span>This book is free. To whom should she be assigned?</span>
+    <form th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.getId()})}">
+        <label for="person">Choose person</label>
+        <select th:object="${person}" th:field="*{id}" id="person">
+            <option th:each="person : ${people}" th:value="${person.getId()}" th:text="${person.getFullName()}">
+            </option>
+        </select>
+        <input type="submit" value="Назначить книгу"/>
+    </form>
+</div>
+<hr/>
 <p></p>
 <a th:href="@{/books/{id}/edit(id=${book.getId()})}">Edit</a>
 

@@ -6,10 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import project1.dao.BookDAO;
 import project1.dao.PersonDAO;
-import project1.models.Book;
 import project1.models.Person;
+import project1.util.PersonValidator;
 
 
 import javax.validation.Valid;
@@ -19,11 +18,16 @@ import java.util.List;
 @Controller
 @RequestMapping("/people")
 public class PersonController {
-    @Autowired
+
     private PersonDAO personDAO;
+    private PersonValidator personValidator;
 
     @Autowired
-    private BookDAO bookDAO;
+    public PersonController(PersonDAO personDAO, PersonValidator personValidator) {
+        this.personDAO = personDAO;
+        this.personValidator = personValidator;
+    }
+
 
     @GetMapping
     public String index(Model model) {
@@ -32,12 +36,10 @@ public class PersonController {
         return "/people/index";
     }
 
-    @GetMapping("/{personId}")
-    public String show(@PathVariable("personId") int personId, Model model) {
-        List<Book> personsBooks = bookDAO.findPersonsBooks(personId);
-        model.addAttribute("person", personDAO.findPersonById(personId));
-        model.addAttribute("personsBooks", personsBooks);
-        model.addAttribute("bookPersons", personsBooks.get(personId));
+    @GetMapping("/{id}")
+    public String show(@PathVariable("id") int id, Model model) {
+        model.addAttribute("person", personDAO.findPersonById(id));
+        model.addAttribute("books", personDAO.getBooksByPersonId(id));
         return "/people/show";
     }
 
@@ -49,6 +51,8 @@ public class PersonController {
     @PostMapping("/createPerson")
     public String create(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult) {
+        personValidator.validate(person, bindingResult);
+
         if (bindingResult.hasErrors())
             return "/people/new";
 
