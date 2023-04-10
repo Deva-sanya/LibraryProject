@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+</head>
+<body>
+<p th:text="${person.getFullName() + ', ' + person.getYearOfBirth()}">VALUE</p>
+<p></p>
+<p>Persons books:</p>
+<p></p>
+<div th:each="bookPersons : ${personsBooks}"
+     th:text="${bookPersons.getName()}"
+     th:text="${bookPersons.getAuthor()}"
+     th:text="${bookPersons.getYear()}">
+</div>
+<p></p>
+<a th:href="@{/people/{id}/edit(id=${person.getId()})}">Edit</a>
+
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
+    <input type="submit" value="Delete"/>
+</form>
+</body>
+</html>
