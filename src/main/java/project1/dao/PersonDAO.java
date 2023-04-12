@@ -1,9 +1,10 @@
 package project1.dao;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import project1.models.Book;
 import project1.models.Person;
 
@@ -12,44 +13,43 @@ import java.util.Optional;
 
 @Component
 public class PersonDAO {
-
-    private final JdbcTemplate jdbcTemplate;
+    private final SessionFactory sessionFactory;
 
     @Autowired
-    public PersonDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public PersonDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
+    @Transactional(readOnly = true)
     public List<Person> getAllPerson() {
-        return jdbcTemplate.query("SELECT * FROM Person", new BeanPropertyRowMapper<>(Person.class));
+        Session session = sessionFactory.getCurrentSession();
+
+        List<Person> people = session.createQuery("select p from Person p", Person.class).
+                getResultList();
+
+
+        return people;
     }
 
     public Person findPersonById(int id) {
-        return jdbcTemplate.query("SELECT * FROM Person WHERE id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
-                .stream().findAny().orElse(null);
+        return null;
     }
 
     public void save(Person person) {
-        jdbcTemplate.update("INSERT INTO Person (fullname, yearofbirth) VALUES(?, ?)", person.getFullName(),
-                person.getYearOfBirth());
     }
 
     public void update(int id, Person updatedPerson) {
-        jdbcTemplate.update("UPDATE Person SET fullname=?, yearofbirth=? WHERE id=?", updatedPerson.getFullName(),
-                updatedPerson.getYearOfBirth(), id);
     }
 
     public void delete(int id) {
-        jdbcTemplate.update("DELETE FROM Person WHERE id=?", id);
+
     }
 
     public Optional<Person> getPersonByFullName(String fullName) {
-        return jdbcTemplate.query("SELECT * FROM Person WHERE fullname=?", new Object[]{fullName},
-                new BeanPropertyRowMapper<>(Person.class)).stream().findAny();
+        return null;
     }
 
     public List<Book> getBooksByPersonId(int id) {
-        return jdbcTemplate.query("SELECT * FROM Book WHERE person_id = ?", new Object[]{id},
-                new BeanPropertyRowMapper<>(Book.class));
+        return null;
     }
 }
