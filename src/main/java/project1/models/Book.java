@@ -19,6 +19,10 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @ManyToOne
+    @JoinColumn(name = "person_id", referencedColumnName = "id")
+    private Person owner;
+
     @Column(name = "name")
     @NotEmpty(message = "Name of book should not be empty")
     @Size(min = 2, max = 100, message = "The title of the book should be between two and 100 characters long.")
