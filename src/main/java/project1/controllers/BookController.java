@@ -12,7 +12,6 @@ import project1.services.PeopleService;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/books")
@@ -35,15 +34,15 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model, @ModelAttribute("person") Person person) {
+    public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("book", booksService.findBookById(id));
+        Person bookOwner = booksService.getBookOwner(id);
 
-        /*Optional<Person> bookOwner = booksService.getBookOwner(id);
-        if (bookOwner.isPresent())
-            model.addAttribute("owner", bookOwner.get());
+        if (bookOwner != null)
+            model.addAttribute("owner", bookOwner.getFullName());
         else
-            model.addAttribute("people", personDAO.getAllPerson());
-*/
+            model.addAttribute("people", peopleService.findAllPeople());
+
         return "books/showBook";
     }
 
@@ -83,14 +82,17 @@ public class BookController {
     }
 
     @PatchMapping("/{id}/release")
-    public String release(@PathVariable("id") int id) {
-        /* booksService.release(id);*/
+    public String release(@PathVariable("id") int id,@ModelAttribute("book") Book book) {
+        booksService.release(id, book);
+        System.out.println("from release");
         return "redirect:/books/" + id;
     }
 
     @PatchMapping("/{id}/assign")
     public String assign(@PathVariable("id") int id, @ModelAttribute("person") Person selectedPerson) {
-        /*booksService.assign(id, selectedPerson);*/
+        booksService.assign(id, selectedPerson);
+        System.out.println("from assign");
         return "redirect:/books/" + id;
     }
+
 }
