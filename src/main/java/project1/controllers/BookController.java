@@ -12,6 +12,7 @@ import project1.services.PeopleService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/books")
@@ -34,16 +35,16 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
+    public String show(@PathVariable("id") int id, Model model, @ModelAttribute("person") Person person) {
         model.addAttribute("book", booksService.findBookById(id));
-        Person bookOwner = booksService.getBookOwner(id);
+        Optional <Person> bookOwner = Optional.ofNullable(booksService.getBookOwner(id));
 
-        if (bookOwner != null)
-            model.addAttribute("owner", bookOwner.getFullName());
+        if (bookOwner.isPresent())
+            model.addAttribute("owner", bookOwner.get());
         else
             model.addAttribute("people", peopleService.findAllPeople());
 
-        return "books/showBook";
+        return "/books/showBook";
     }
 
     @GetMapping("/new")
@@ -82,16 +83,14 @@ public class BookController {
     }
 
     @PatchMapping("/{id}/release")
-    public String release(@PathVariable("id") int id,@ModelAttribute("book") Book book) {
-        booksService.release(id, book);
-        System.out.println("from release");
+    public String release(@PathVariable("id") int id) {
+        booksService.release(id);
         return "redirect:/books/" + id;
     }
 
     @PatchMapping("/{id}/assign")
     public String assign(@PathVariable("id") int id, @ModelAttribute("person") Person selectedPerson) {
         booksService.assign(id, selectedPerson);
-        System.out.println("from assign");
         return "redirect:/books/" + id;
     }
 

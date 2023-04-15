@@ -24,7 +24,6 @@ public class BooksService {
 
     @Autowired
     public BooksService(BookRepository bookRepository, PersonRepository personRepository) {
-
         this.personRepository = personRepository;
         this.bookRepository = bookRepository;
     }
@@ -75,16 +74,17 @@ public class BooksService {
     }
 
     @Transactional
-    public void release(int id, Book updatedBook) {
-        updatedBook.setId(id);
-        updatedBook.setOwner(null);
-        bookRepository.save(updatedBook);
+    public void release(int id) {
+      Optional<Book> foundBook = bookRepository.findById(id);
+      if(foundBook.isPresent()){
+          foundBook.get().setOwner(null);
+      }
     }
 
     @Transactional
     public void assign(int id, Person selectedPerson) {
-        Optional <Book> currentBook  = bookRepository.findById(id);
-        if (currentBook.isPresent()){
+        Optional<Book> currentBook = bookRepository.findById(id);
+        if (currentBook.isPresent()) {
             currentBook.get().setOwner(selectedPerson);
         }
     }
