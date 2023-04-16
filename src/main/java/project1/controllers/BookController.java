@@ -96,13 +96,19 @@ public class BookController {
 
     @GetMapping("/search")
     public String searchBook(@ModelAttribute("book") Book book) {
+
         return "/books/search";
     }
 
     @PostMapping("/searchBook")
     public String search(@RequestParam(value = "name", required = false) String name, Model model) {
-        Book book = booksService.findBook(name);
-        model.addAttribute("book", book);
+        if (name != null) {
+            Book book = booksService.findBook(name);
+            model.addAttribute("book", book);
+        } else {
+            String message = "Book is free";
+            model.addAttribute("message", message);
+        }
         return "/books/search";
     }
 }

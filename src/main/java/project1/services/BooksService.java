@@ -12,6 +12,7 @@ import project1.repositories.BookRepository;
 import project1.repositories.PersonRepository;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,6 +87,7 @@ public class BooksService {
         Optional<Book> currentBook = bookRepository.findById(id);
         if (currentBook.isPresent()) {
             currentBook.get().setOwner(selectedPerson);
+            currentBook.get().setTakenAt(new Date());
         }
     }
 

@@ -8,6 +8,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Setter
 @Getter
@@ -37,6 +38,10 @@ public class Book {
     @Positive(message = "Year should not be negative")
     @Min(value = 1500, message = "Year should be more then 1500.")
     private int year;
+
+    @Column(name = "taken_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date takenAt;
 
     public Book() {
 
