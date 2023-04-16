@@ -75,10 +75,10 @@ public class BooksService {
 
     @Transactional
     public void release(int id) {
-      Optional<Book> foundBook = bookRepository.findById(id);
-      if(foundBook.isPresent()){
-          foundBook.get().setOwner(null);
-      }
+        Optional<Book> foundBook = bookRepository.findById(id);
+        if (foundBook.isPresent()) {
+            foundBook.get().setOwner(null);
+        }
     }
 
     @Transactional
@@ -89,4 +89,7 @@ public class BooksService {
         }
     }
 
+    public Book findBook(String name) {
+        return bookRepository.findBookByNameStartsWith(name);
+    }
 }

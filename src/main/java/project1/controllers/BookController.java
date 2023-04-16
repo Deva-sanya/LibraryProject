@@ -37,7 +37,7 @@ public class BookController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model, @ModelAttribute("person") Person person) {
         model.addAttribute("book", booksService.findBookById(id));
-        Optional <Person> bookOwner = Optional.ofNullable(booksService.getBookOwner(id));
+        Optional<Person> bookOwner = Optional.ofNullable(booksService.getBookOwner(id));
 
         if (bookOwner.isPresent())
             model.addAttribute("owner", bookOwner.get());
@@ -94,4 +94,15 @@ public class BookController {
         return "redirect:/books/" + id;
     }
 
+    @GetMapping("/search")
+    public String searchBook(@ModelAttribute("book") Book book) {
+        return "/books/search";
+    }
+
+    @PostMapping("/searchBook")
+    public String search(@RequestParam(value = "name", required = false) String name, Model model) {
+        Book book = booksService.findBook(name);
+        model.addAttribute("book", book);
+        return "/books/search";
+    }
 }

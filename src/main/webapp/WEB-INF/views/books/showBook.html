@@ -6,7 +6,6 @@
 </head>
 
 <p th:text="${book.getName() + ', ' + book.getAuthor() + ', ' + book.getYear()}">VALUE</p>
-<p>Select person to current book:</p>
 
 <div th:if="${owner}">
     <span>Book now at: </span> <span th:text="${owner.getFullName()}">Person Name</span>
@@ -30,7 +29,6 @@
 <hr/>
 <p></p>
 <a th:href="@{/books/{id}/edit(id=${book.getId()})}">Edit</a>
-
 <form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}">
     <input type="submit" value="Delete"/>
 </form>

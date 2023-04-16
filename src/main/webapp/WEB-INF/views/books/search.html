@@ -5,12 +5,12 @@
     <title>Search</title>
 </head>
 <body>
-<form th:method="POST" th:action="@{/books/search}" th:object="${bookByNameFound}">
-    <label for="name">Enter name of book: </label>
-    <input type="text" th:field="*{name}" id="name"/>
-    <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
-    <br/>
-    <input type="submit" value="Find book!"/>
-</form>
+    <form th:action="@{/books/searchBook}" method="POST">
+        <input type="text" name="name" th:value="${param.name}"  placeholder="Find book by Name" size="100" >
+        <button type="submit" class="btn btn-info" >Search</button>
+    </form>
+<div th:if="${book}">
+    <span>Book now at: </span> <span th:text="${book.getOwner().getFullName()}">Person Name</span>
+</div>
 </body>
 </html>
