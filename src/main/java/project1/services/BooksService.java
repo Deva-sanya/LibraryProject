@@ -11,10 +11,8 @@ import project1.models.Person;
 import project1.repositories.BookRepository;
 import project1.repositories.PersonRepository;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.beans.Transient;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)

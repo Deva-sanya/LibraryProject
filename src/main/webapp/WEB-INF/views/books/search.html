@@ -10,6 +10,7 @@
     <button type="submit" class="btn btn-info">Search</button>
 </form>
 <div th:if="${book}">
+    <p th:text="${book.getName() + ', ' + book.getAuthor() + ', ' + book.getYear()+', '+ 'Book was taken at: '+ book.getTakenAt()}">VALUE</p>
     <span>Book now at: </span> <span th:text="${book.getOwner().getFullName()}">Person Name</span>
 </div>
 

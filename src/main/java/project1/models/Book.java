@@ -43,6 +43,10 @@ public class Book {
     @Temporal(TemporalType.TIMESTAMP)
     private Date takenAt;
 
+    @Column(name = "timeToReturn")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timeToReturn;
+
     public Book() {
 
     }
