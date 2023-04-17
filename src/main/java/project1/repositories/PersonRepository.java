@@ -4,8 +4,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import project1.models.Person;
 
+import java.util.Optional;
+
 
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Integer> {
-    Person findPersonByFullName(String fullName);
+    Optional<Person> findPersonByFullName(String fullName);
 }

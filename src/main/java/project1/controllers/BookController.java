@@ -12,7 +12,6 @@ import project1.services.BooksService;
 import project1.services.PeopleService;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,20 +96,14 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public String searchBook(@ModelAttribute("book") Book book) {
-
+    public String searchBook() {
         return "/books/search";
     }
 
     @PostMapping("/searchBook")
     public String search(@RequestParam(value = "name", required = false) String name, Model model) {
-        if (name != null) {
-            Book book = booksService.findBook(name);
-            model.addAttribute("book", book);
-        } else {
-            String message = "Book is free";
-            model.addAttribute("message", message);
-        }
+            List<Book> books = booksService.findBook(name);
+            model.addAttribute("books", books);
         return "/books/search";
     }
 }

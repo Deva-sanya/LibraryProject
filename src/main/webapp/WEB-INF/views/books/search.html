@@ -6,17 +6,25 @@
 </head>
 <body>
 <form th:action="@{/books/searchBook}" method="POST">
-    <input type="text" name="name" th:value="${param.name}" placeholder="Find book by Name" size="100">
+    <label for="name">Insert name of book to search : </label>
+    <input type="text" name="name" id="name" placeholder="Find book by Name" size="100">
     <button type="submit" class="btn btn-info">Search</button>
 </form>
-<div th:if="${book}">
-    <p th:text="${book.getName() + ', ' + book.getAuthor() + ', ' + book.getYear()+', '+ 'Book was taken at: '+ book.getTakenAt()}">VALUE</p>
-    <span>Book now at: </span> <span th:text="${book.getOwner().getFullName()}">Person Name</span>
-</div>
 
-<div th:if="${message}">
-    <span>Book now at: </span> <span th:text="${message.toString()}">Message</span>
+<div th:if="${books}">
+    <div th:if="${books.isEmpty()}">
+        <span>Book does not found</span>
+    </div>
+    <div th:each="book : ${books}">
+        <p th:text="${book.getName() + ', ' + book.getAuthor() + ', ' + book.getYear()+', '+ 'Book was taken at: '+ book.getTakenAt()}">book</p>
+        <div th:if="${book.getOwner() != null}">
+            <span>Book now at: </span> <span th:text="${book.getOwner().getFullName()}">Person Name</span>
+        </div>
+        <div th:if="${book.getOwner() == null}">
+            <span>Book free</span>
+        </div>
+        <hr/>
+    </div>
 </div>
-
 </body>
 </html>

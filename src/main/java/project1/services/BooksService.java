@@ -11,7 +11,6 @@ import project1.models.Person;
 import project1.repositories.BookRepository;
 import project1.repositories.PersonRepository;
 
-import java.beans.Transient;
 import java.util.*;
 
 @Service
@@ -52,16 +51,6 @@ public class BooksService {
         bookRepository.deleteById(id);
     }
 
-    public List<Book> getBooksByPersonId(int id) {
-        Optional<Person> person = personRepository.findById(id);
-        if (person.isPresent()) {
-            Hibernate.initialize(person.get().getBooks());
-            return person.get().getBooks();
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
     public Person getBookOwner(int id) {
         Optional<Book> book = bookRepository.findById(id);
         if (book.isPresent()) {
@@ -77,6 +66,7 @@ public class BooksService {
         Optional<Book> foundBook = bookRepository.findById(id);
         if (foundBook.isPresent()) {
             foundBook.get().setOwner(null);
+            foundBook.get().setTakenAt(null);
         }
     }
 
@@ -89,7 +79,7 @@ public class BooksService {
         }
     }
 
-    public Book findBook(String name) {
+    public List<Book> findBook(String name) {
         return bookRepository.findBookByNameStartsWith(name);
     }
 }
